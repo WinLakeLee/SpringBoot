@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.test.domain.dto.WeatherDTO;
@@ -30,7 +29,7 @@ public class WeatherController {
 	@PostMapping("")
 	public ResponseEntity<String> inputWeather(@RequestBody WeatherDTO dto) {
 		String result = weatherService.WeatherInput(dto);
-		return ResponseEntity.ok(result);
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("all")
@@ -48,7 +47,7 @@ public class WeatherController {
 	@GetMapping("region")
 	public ResponseEntity<List<WeatherDTO>> findWeatherByLocation(@RequestParam("location") String locationName){
 		List<WeatherDTO> WeatherLocationList = weatherService.findAllByLocationName(locationName);
-		return ResponseEntity.ok(WeatherLocationList);
+		return new ResponseEntity<>(WeatherLocationList, HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("")

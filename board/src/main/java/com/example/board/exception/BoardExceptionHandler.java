@@ -1,4 +1,4 @@
-package com.example.board;
+package com.example.board.exception;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
