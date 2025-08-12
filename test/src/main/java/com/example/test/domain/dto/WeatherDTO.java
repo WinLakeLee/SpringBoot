@@ -21,7 +21,7 @@ public class WeatherDTO {
 	 Double windSpeed;
 	 String windDiraction;
 	 Double humidity;
-	 Integer precipitation;
+	 Integer precipitationProbaility;
 	 LocalDateTime Time;
 	 String Weather;
 }

@@ -1,12 +1,9 @@
 package com.example.test.service;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +22,7 @@ public class WeatherService {
 
 	private final WeatherRepository repository;
 	private final LocationRepository locationRepository;
+	private final ModelMapper modelMapper;
 	
 	public String WeatherInput(WeatherDTO dto) {
         LocationEntity location;
@@ -44,7 +42,7 @@ public class WeatherService {
 				.windSpeed(dto.getWindSpeed())
 				.windDiraction(dto.getWindDiraction())
 				.humidity(dto.getHumidity())
-				.precipitationProbability(dto.getPrecipitation())
+				.precipitationProbability(dto.getPrecipitationProbaility())
 				.Time(dto.getTime())
 				.Weather(dto.getWeather())
 				.build();
@@ -88,32 +86,12 @@ public class WeatherService {
 	}
 	
 	private WeatherEntity DTOToEntity(WeatherDTO dto) {
-		WeatherEntity entity  = WeatherEntity.builder()
-				.indentifyNo(dto.getIndentifyNo())
-				.location(dto.getLocation())
-				.temperature(dto.getTemperature())
-				.windSpeed(dto.getWindSpeed())
-				.windDiraction(dto.getWindDiraction())
-				.humidity(dto.getHumidity())
-				.precipitationProbability(dto.getPrecipitation())
-				.Time(dto.getTime())
-				.Weather(dto.getWeather())
-				.build();
+		WeatherEntity entity = modelMapper.map(dto, WeatherEntity.class);
 		return entity;
 	}
 	
 	private WeatherDTO EntityToDTO(WeatherEntity entity) {
-		WeatherDTO dto = WeatherDTO.builder()
-				.indentifyNo(entity.getIndentifyNo())
-				.location(entity.getLocation())
-				.temperature(entity.getTemperature())
-				.windSpeed(entity.getWindSpeed())
-				.windDiraction(entity.getWindDiraction())
-				.humidity(entity.getHumidity())
-				.precipitation(entity.getPrecipitationProbability())
-				.Time(entity.getTime())
-				.Weather(entity.getWeather())
-				.build();
+		WeatherDTO dto = modelMapper.map(entity, WeatherDTO.class);
 		return dto;
 	}
 }

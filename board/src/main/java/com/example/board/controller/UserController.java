@@ -1,6 +1,5 @@
 package com.example.board.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.board.UserRepository;
 import com.example.board.domain.RoleType;
 import com.example.board.domain.User;
 import com.example.board.exception.BoardException;
+import com.example.board.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -32,7 +31,7 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@PostMapping({""})
+	@PostMapping("")
 	public ResponseEntity<String> insertUser(
 			@Validated @RequestBody User user) {
 		user.setRole(RoleType.USER);
@@ -42,8 +41,8 @@ public class UserController {
 	
 	@GetMapping("{id}")
 	public ResponseEntity<User> getUser(@PathVariable("id") int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new BoardException(id + "번 회원은 존재하지 않습니다."));
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		userRepository.findById(id).orElseThrow(() -> new BoardException(id + "번 회원은 존재하지 않습니다."));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping("")
