@@ -15,10 +15,10 @@ const userObject = {
 					},
 					body: JSON.stringify(data)
 				})
-					.then(res => res.status == 200 ?
-						window.location.href = "/" :
-						console.log(res)
-					)
+					.then(res => res.json)
+					.then(json => {
+							window.location.href = "/"
+					})
 					.catch(err => console.log(err))
 			})
 		}

@@ -9,12 +9,16 @@
 	rel="stylesheet"
 	integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
 	crossorigin="anonymous" />
+<!-- include summernote css/js -->
+<link
+	href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css"
+	rel="stylesheet">
 </head>
 <body>
 	<nav th:fragment="header"
 		class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
 		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/}"> <img
+			<a class="navbar-brand" href="/"> <img
 				src="https://raw.githubusercontent.com/WinLakeLee/data-bank/main/Jokebear.svg"
 				alt="jokebear" width="30" height="24"
 				class="d-inline-block align-text-top"> JokeBear
@@ -30,7 +34,8 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a class="nav-link active"
 							aria-current="page" th:href="@{/auth/join}">회원가입</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{/auth/login}">로그인</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/auth/login}">로그인</a></li>
 						<li class="nav-item"><a class="nav-link disabled"
 							aria-disabled="true">Disabled</a></li>
 					</ul>
@@ -39,8 +44,10 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a class="nav-link active"
 							aria-current="page" th:href="@{/auth/info}">회원정보</a></li>
-						<li class="nav-item"><a class="nav-link" href="">게시글등록</a></li>
-						<li class="nav-item"><a class="nav-link" th:href="@{/auth/logout}">로그아웃</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/post/insert}">게시글등록</a></li>
+						<li class="nav-item"><a class="nav-link"
+							th:href="@{/auth/logout}">로그아웃</a></li>
 					</ul>
 				</th:block>
 				<form class="d-flex" role="search">
@@ -66,6 +73,8 @@
 		<!-- JQuery -->
 		<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 	</th:block>
 </body>
 </html>

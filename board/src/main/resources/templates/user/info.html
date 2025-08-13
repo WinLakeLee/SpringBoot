@@ -5,17 +5,24 @@
 	<th:block th:replace="~{fragments/common :: header}"></th:block>
 	<div class="container mt-3">
       <form>
+      <div class="mb-3">
+          <input type="text" class="form-control" id="id" name="id" th:value="${info.id}" readonly="readonly" hidden="hidden">
+        </div>
         <div class="mb-3 mt-3">
           <label for="username" class="form-label">userName:</label>
-          <input type="text" class="form-control" id="username" placeholder="Enter username" name="userName" th:value="${user.userName}">
+          <input type="text" class="form-control" id="username" placeholder="Enter username" name="userName" th:value="${info.userName}">
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password:</label>
-          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" th:value="${user.password}">
+          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+        </div>
+                <div class="mb-3">
+          <label for="password" class="form-label">New Password:</label>
+          <input type="password" class="form-control" id="new-password" placeholder="Enter password" name="newPassword">
         </div>        
         <div class="mb-3">
-          <label for="password" class="form-label">Email:</label>
-          <input type="password" class="form-control" id="email" placeholder="Enter email" name="email" th:value="${user.email}">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" th:value="${info.email}">
         </div>
         <button id="btn-modify" type="submit" class="btn btn-primary">수정</button>
       	<button id="btn-delete" type="submit" class="btn btn-primary">삭제</button>
@@ -23,5 +30,6 @@
       </form>
    </div>
 	<th:block th:replace="~{fragments/common :: scripts}"></th:block>
+    <script src="/js/info.js"></script>
 </body>
 </html>

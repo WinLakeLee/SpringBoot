@@ -26,13 +26,10 @@ public class WeatherService {
 	
 	public String WeatherInput(WeatherDTO dto) {
         LocationEntity location;
-
-        // 1. Location ID가 존재하면 기존 Location 불러오기
         if (dto.getLocation() != null && dto.getLocation().getLocationId() != null) {
             location = locationRepository.findById(dto.getLocation().getLocationId())
                     .orElseThrow(() -> new RuntimeException("해당 Location 없음"));
         }
-        // 2. ID가 없으면 새 Location 저장
         else {
             location = locationRepository.save(dto.getLocation());
         }
@@ -43,8 +40,8 @@ public class WeatherService {
 				.windDiraction(dto.getWindDiraction())
 				.humidity(dto.getHumidity())
 				.precipitationProbability(dto.getPrecipitationProbaility())
-				.Time(dto.getTime())
-				.Weather(dto.getWeather())
+				.time(dto.getTime())
+				.weather(dto.getWeather())
 				.build();
 		repository.save(entity);
 		return "날씨 정보 저장 완료";

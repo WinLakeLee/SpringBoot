@@ -1,11 +1,13 @@
 package com.example.board.service;
 
+import java.rmi.ServerException;
 import java.util.Map;
+import java.util.Optional;
+
+import javax.security.sasl.AuthenticationException;
 
 import org.hibernate.action.internal.EntityActionVetoException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.board.domain.RoleType;
@@ -42,12 +44,12 @@ public class MemberService {
 	public HttpStatus loginUser(Map<String, String> map) {
 		try {
 			User loginUser = getUser(map.get("userName"));
-			if(loginUser.getUserName().isEmpty())
-				throw new EntityNotFoundException("존재하지 않는 유저");
+			if (loginUser.getUserName().isEmpty())
+				throw new EntityNotFoundException();
 			if (map.get("password").equals(loginUser.getPassword()))
 				return HttpStatus.OK;
 			else if (map.get("password") != loginUser.getPassword())
-				throw new EntityActionVetoException("비밀번호가 틀림", null);
+				throw new EntityActionVetoException(null, null);
 			else
 				throw new EntityNotFoundException();
 		} catch (EntityNotFoundException e) {
@@ -56,6 +58,48 @@ public class MemberService {
 			return HttpStatus.UNAUTHORIZED;
 		} catch (Exception e) {
 			return HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+	}
+
+	public User updateUser(Map<String, Object> map) {
+		User findUser = getUser((String) map.get("userName"));
+		if (findUser.getPassword().equals((String) map.get("password"))) {
+			if (((String) map.get("newPassword")).equals(""))
+				findUser.setPassword((String) map.get("password"));
+			else
+				findUser.setPassword((String) map.get("newPassword"));
+			findUser.setUserName((String) map.get("userName"));
+			findUser.setEmail((String) map.get("email"));
+			userRepository.save(findUser);
+			return findUser;
+		} else
+			return null;
+
+	}
+
+	public boolean deleteUser(Map<String, Object> map, Integer id) {
+		try {
+			User findUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+
+			if (findUser.getPassword() != ((String) map.get("password")))
+				throw new AuthenticationException();
+			else if (findUser.getPassword() == (String) map.get("password")) {
+				userRepository.deleteById(id);
+				return true;
+			} else
+				throw new ServerException(null);
+		} catch (EntityNotFoundException e) {
+			System.out.println(e);
+			return false;
+		} catch (AuthenticationException e) {
+			System.out.println(e);
+			return false;
+		} catch (ServerException e) {
+			System.out.println(e);
+			return false;
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
 		}
 	}
 }

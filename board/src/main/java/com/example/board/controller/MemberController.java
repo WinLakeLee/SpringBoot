@@ -1,17 +1,18 @@
 package com.example.board.controller;
 
-import java.util.Collection;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.board.domain.ResponseDTO;
@@ -19,16 +20,14 @@ import com.example.board.domain.User;
 import com.example.board.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 
-@Slf4j
 @Controller
 @RequestMapping("auth")
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class MemberController {
 
-	@Autowired
-	private MemberService memberService;
+	private final MemberService memberService;
 
 	@GetMapping("join")
 	public String join() {
@@ -37,16 +36,15 @@ public class MemberController {
 
 	@PostMapping("join")
 	@ResponseBody
-		public ResponseDTO<?> Register(@RequestBody User user) {
+	public ResponseDTO<?> Register(@RequestBody User user) {
 		System.out.println(user.toString());
 		User findUser = memberService.getUser(user.getUserName());
-		if(findUser.getUserName() == null) {
+		if (findUser.getUserName() == null) {
 			memberService.joinUser(user);
-		return new ResponseDTO<>(HttpStatus.ACCEPTED, user.getUserName() + "님 회원가입 성공");
+			return new ResponseDTO<>(HttpStatus.ACCEPTED, user.getUserName() + "님 회원가입 성공");
 		} else {
 			return new ResponseDTO<>(HttpStatus.BAD_REQUEST, user.getUserName() + "님은 이미 가입한 회원입니다");
 		}
-			
 	}
 
 	@PostMapping("join2")
@@ -66,22 +64,44 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<?> login(@RequestBody Map<String, String> map, HttpSession session) {
 		HttpStatus status = memberService.loginUser(map);
-		if(status.is2xxSuccessful()) {
+		if (status.is2xxSuccessful()) {
 			session.setAttribute("principal", map.get("userName"));
 		}
 		return new ResponseEntity<>(status);
 	}
-	
+
 	@GetMapping("logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("principal");
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("info")
 	public String info(HttpSession session, Model model) {
-		User user = memberService.getUser((String)session.getAttribute("principal"));
-		model.addAttribute("user", user);
-		return "info";
+		User user = memberService.getUser((String) session.getAttribute("principal"));
+		System.out.println(user);
+		model.addAttribute("info", user);
+		return "user/info";
+	}
+
+	@PutMapping("update")
+	@ResponseBody
+	public ResponseEntity<?> update(@RequestBody Map<String, Object> map, HttpSession session) {
+		User findUser = memberService.updateUser(map);
+		System.out.println(findUser);
+		session.setAttribute("principal", findUser.getUserName());
+		return ResponseEntity.ok("수정 완료");
+
+	}
+
+	@DeleteMapping("user")
+	public ResponseEntity<?> delete(@RequestBody Map<String, Object> map, 
+			@RequestParam("id") Integer id,
+			HttpSession session
+			) {
+		System.out.println(map);
+		boolean result = memberService.deleteUser(map, id);
+		session.invalidate();
+		return ResponseEntity.ok(result ? "회원 탈퇴 성공" : "회원 탈퇴 실패");
 	}
 }

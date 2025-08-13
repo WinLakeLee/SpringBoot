@@ -68,9 +68,10 @@ public class WeatherEntity {
 	@Builder.Default
 	private Integer precipitationProbability = 0;
 	
-	@Column(nullable = false)
-	private LocalDateTime Time;
+	@Column(name= "weather_time", nullable = false)
+	private LocalDateTime time;
 	
 	@Column(nullable = false)
-	private String Weather;
+	private String weather;
+
 }
