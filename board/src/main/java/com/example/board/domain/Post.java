@@ -1,7 +1,10 @@
 package com.example.board.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,6 +18,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,5 +56,10 @@ public class Post {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "post", orphanRemoval = true)
+	@Cascade(CascadeType.REMOVE)
+	@OrderBy("reply_id desc")
+	private List<Reply> replyList;
 	
 }

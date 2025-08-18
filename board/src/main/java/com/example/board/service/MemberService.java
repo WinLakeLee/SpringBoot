@@ -2,16 +2,17 @@ package com.example.board.service;
 
 import java.rmi.ServerException;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.security.sasl.AuthenticationException;
 
 import org.hibernate.action.internal.EntityActionVetoException;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.board.domain.RoleType;
 import com.example.board.domain.User;
+import com.example.board.domain.UserDTO;
 import com.example.board.repository.UserRepository;
 
 import jakarta.persistence.EntityExistsException;
@@ -25,8 +26,10 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	private final UserRepository userRepository;
-
-	public User joinUser(User user) {
+	ModelMapper mapper = new ModelMapper();
+	
+	public User joinUser(UserDTO userDto) {
+		User user = mapper.map(userDto, User.class);
 		boolean isExists = userRepository.findByUserName(user.getUserName()).isPresent();
 		if (!isExists) {
 			user.setRole(RoleType.USER);

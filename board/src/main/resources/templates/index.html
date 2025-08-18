@@ -11,43 +11,25 @@
 			<div class="card" th:each="post : ${postList.content}">
 				<div class="card-body">
 					<h4 class="card-title" th:text="${post.title}">게시물제목</h4>
-					<p class="card-text" th:text="${post.content}"></p>
-					<a href="#" class="btn btn-secondary">상세보기</a>
+					<p class="card-text"></p>
+					<a th:href="@{|/post/${post.postId - 1}|}" class="btn btn-secondary">상세보기</a>
 				</div>
 			</div>
 		</th:block>
 	</div>
 	<br>
+
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
 			<li class="page-item"><a class="page-link" th:href="@{?page=0}"
-				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-			</a></li>
-			<li class="page-item" th:classappend="${postList.first} ? 'disabled'">
-				<a class="page-link" th:href="@{|?page=${postList.number-1}|}">이전</a>
-			</li>
-			<li class="page-item"
-				th:each="i : ${#numbers.sequence(0, postList.totalPages-1)}"
-				th:classappend="${postList.number == i} ? 'active'"><a
-				class="page-link" th:href="@{|?page=${i}|}" th:text="${i+1}"></a></li>
-			<li class="page-item" th:classappend="${postList.last} ? 'disabled'">
-				<a class="page-link" th:href="@{|?page=${postList.number+1}|}">다음</a>
-			</li>
-			<li class="page-item"><a class="page-link"
-				th:href="@{|?page=${postList.totalPages-1}|}" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-			</a></li>
-		</ul>
-	</nav>
-		<nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-center">
-			<li class="page-item"><a class="page-link" th:href="@{?page=0}"
-				aria-label="Previous" th:classappend="${!pageDTO.prev} ? 'visually-hidden'"> <span aria-hidden="true">&laquo;</span>
+				aria-label="Previous"
+				th:classappend="${!pageDTO.prev} ? 'visually-hidden'"> <span
+					aria-hidden="true">&laquo;</span>
 			</a></li>
 			<li class="page-item" th:classappend="${!pageDTO.prev} ? 'disabled'">
 				<a class="page-link" th:href="@{|?page=${pageDTO.startPage - 2}|}">&lt;</a>
 			</li>
-						<li class="page-item" th:classappend="${postList.first} ? 'disabled'">
+			<li class="page-item" th:classappend="${postList.first} ? 'disabled'">
 				<a class="page-link" th:href="@{|?page=${postList.number-1}|}">이전</a>
 			</li>
 			<li class="page-item"
@@ -55,18 +37,18 @@
 				th:classappend="${postList.number == i-1} ? 'active'"><a
 				class="page-link" th:href="@{|?page=${i-1}|}" th:text="${i}"></a></li>
 			<li class="page-item" th:classappend="${postList.last} ? 'disabled'">
-						<li class="page-item" th:classappend="${postList.last} ? 'disabled'">
+			<li class="page-item" th:classappend="${postList.last} ? 'disabled'">
 				<a class="page-link" th:href="@{|?page=${postList.number+1}|}">다음</a>
 			</li>
 			<li class="page-item" th:classappend="${!pageDTO.next} ? 'disabled'">
 				<a class="page-link" th:href="@{|?page=${pageDTO.endPage}|}">&gt;</a>
 			</li>
-			<li class="page-item"  th:classappend="${!pageDTO.next} ? 'visually-hidden'"><a class="page-link"
-				th:href="@{|?page=${postList.totalPages-1}|}" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
+			<li class="page-item"
+				th:classappend="${!pageDTO.next} ? 'visually-hidden'"><a
+				class="page-link" th:href="@{|?page=${postList.totalPages-1}|}"
+				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>
-		
 	</nav>
 	<th:block th:replace="~{fragments/common :: footer}"></th:block>
 	<th:block th:replace="~{fragments/common :: scripts}"></th:block>

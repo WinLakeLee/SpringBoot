@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="~{head(pageTitle)}">
 <meta charset="UTF-8" />
 <title th:text="${pageTitle}"></title>
@@ -11,9 +11,8 @@
 	crossorigin="anonymous" />
 <!-- include summernote css/js -->
 <link
-	href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css"
+	href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.css"
 	rel="stylesheet">
-</head>
 <body>
 	<nav th:fragment="header"
 		class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
@@ -71,10 +70,11 @@
 			integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
 			crossorigin="anonymous"></script>
 		<!-- JQuery -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 		<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-		<script
-			src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+			src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.js"></script>
 	</th:block>
 </body>
 </html>

@@ -25,12 +25,25 @@ const userObject = {
 						.then(res => res.json())
 						.then(json => {
 							alert(json.data)
-							if (json.status == 400)
-								return
-							window.location.href = "/"
+							if (json.status == 200) {
+								alert(json.data)
+								window.location.href = "/"
+							} else {
+								let msg = '';
+								let errors = json.data;
+								if (typeof errors == 'string')
+									msg = errors
+								if (errors.username != null)
+									msg += errors.username + '\n'
+								if (errors.password != null)
+									msg += errors.password + '\n'
+								if (errors.email != null)
+									msg += errors.email + '\n'
+								alert(msg)	
+							}
 						})
 						.catch(err => console.log(err))
-				}	
+				}
 				join()
 			})
 		}

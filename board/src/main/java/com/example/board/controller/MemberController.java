@@ -1,11 +1,14 @@
 package com.example.board.controller;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.board.domain.ResponseDTO;
 import com.example.board.domain.User;
+import com.example.board.domain.UserDTO;
 import com.example.board.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -36,22 +41,25 @@ public class MemberController {
 
 	@PostMapping("join")
 	@ResponseBody
-	public ResponseDTO<?> Register(@RequestBody User user) {
-		System.out.println(user.toString());
-		User findUser = memberService.getUser(user.getUserName());
+	public ResponseDTO<?> Register(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+//			HashMap<String, ?> errorMap = bindingResult.getAllErrors().stream().collect(Collectors.toMap(Errors::, null));
+			
+		}
+		User findUser = memberService.getUser(userDTO.getUserName());
 		if (findUser.getUserName() == null) {
-			memberService.joinUser(user);
-			return new ResponseDTO<>(HttpStatus.ACCEPTED, user.getUserName() + "님 회원가입 성공");
+			memberService.joinUser(userDTO);
+			return new ResponseDTO<>(HttpStatus.ACCEPTED, userDTO.getUserName() + "님 회원가입 성공");
 		} else {
-			return new ResponseDTO<>(HttpStatus.BAD_REQUEST, user.getUserName() + "님은 이미 가입한 회원입니다");
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST, userDTO.getUserName() + "님은 이미 가입한 회원입니다");
 		}
 	}
 
 	@PostMapping("join2")
-	public String Register2(User user, Model model) {
-		System.out.println(user.toString());
-		memberService.joinUser(user);
-		model.addAttribute("msg", user.getUserName() + "님 회원가입 성공");
+	public String Register2(UserDTO userDTO, Model model) {
+		System.out.println(userDTO.toString());
+		memberService.joinUser(userDTO);
+		model.addAttribute("msg", userDTO.getUserName() + "님 회원가입 성공");
 		return "index";
 	}
 
@@ -79,7 +87,6 @@ public class MemberController {
 	@GetMapping("info")
 	public String info(HttpSession session, Model model) {
 		User user = memberService.getUser((String) session.getAttribute("principal"));
-		System.out.println(user);
 		model.addAttribute("info", user);
 		return "user/info";
 	}
@@ -88,17 +95,14 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<?> update(@RequestBody Map<String, Object> map, HttpSession session) {
 		User findUser = memberService.updateUser(map);
-		System.out.println(findUser);
 		session.setAttribute("principal", findUser.getUserName());
 		return ResponseEntity.ok("수정 완료");
 
 	}
 
 	@DeleteMapping("user")
-	public ResponseEntity<?> delete(@RequestBody Map<String, Object> map, 
-			@RequestParam("id") Integer id,
-			HttpSession session
-			) {
+	public ResponseEntity<?> delete(@RequestBody Map<String, Object> map, @RequestParam("id") Integer id,
+			HttpSession session) {
 		System.out.println(map);
 		boolean result = memberService.deleteUser(map, id);
 		session.invalidate();

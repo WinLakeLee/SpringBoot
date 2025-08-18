@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragments/common :: head('상세페이지')}"></th:block>
+<body>
+	<th:block th:replace="~{fragments/common :: header}"></th:block>
+
+	<div class="container border py-3 mt-3">
+		<div>
+			<h3 th:text="${post.title}">게시물 제목</h3>
+		</div>
+		<div>
+			<p th:utext="${post.content}">게시물 내용</p>
+		</div>
+		<div>
+			<p>
+				포스트 번호 : <span class="id" th:text="${post.postId}">1</span>
+			</p>
+			<p>
+				작성자 : <span th:text="${post.user.userName}"></span>
+			</p>
+		</div>
+		<hr>
+		<button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
+		<th:block th:if="${post.user.userName == session.principal}">
+			<a th:href="@{|/post/update/${post.postId}|}" class="btn btn-warning">수정하기</a>
+			<button id="btn-delete" class="btn btn-danger">삭제하기</button>
+		</th:block>
+
+		<br> <br>
+		<div class="container mt-3">
+			<input type="hidden" id="postId" th:value="${post.postId}">
+			<table class="table">
+				<thead>
+					<tr>
+						<th width="10%"><span th:text="${session.principal}"></span>
+						</th>
+						<th width="75%"><textarea id="reply-content" rows="1"
+								class="form-control"></textarea></th>
+						<th width="15%">
+							<button id="btn-save-reply" class="btn btn-secondary mt-3">댓글등록</button>
+						</th>
+					</tr>
+					<tr>
+						<th width="10%">작성자</th>
+						<th width="75%">내용</th>
+						<th width="15%">삭제</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="reply : ${post.replyList}" class="replyList">
+						<td class="replywriter" th:text="${reply.user.userName}"></td>
+						<td class="replytext" th:text="${reply.content}"></td>
+						<td class="replydelete"><th:block
+								th:if="${reply.user.userName == session.principal}">
+								<button class="btn btn-danger btn-delete-reply" th:data-id="${reply.replyId}">&times;</button>
+							</th:block></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<th:block th:replace="~{fragments/common :: footer}"></th:block>
+	<th:block th:replace="~{fragments/common :: scripts}"></th:block>
+	<script src="/js/post.js"></script>
+	<script src="/js/reply.js"></script>
+</body>
+</html>
