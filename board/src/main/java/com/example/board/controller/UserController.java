@@ -31,7 +31,7 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<String> insertUser(
 			@Validated @RequestBody User user) {
 		user.setRole(RoleType.USER);
@@ -45,7 +45,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping("")
+	@PutMapping
 	public ResponseEntity<String> updateUser(@Validated @RequestBody User user) {
 		User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new BoardException(user.getId() + "번 회원은 존재하지 않습니다."));
 		findUser.setUserName(user.getUserName());

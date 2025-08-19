@@ -17,17 +17,16 @@ const userObject = {
 				})
 					.then(res => res.json)
 					.then(json => {
-						if (json.status == 200)
+						let msg = ''
+						if (json.status == 400) {
+							msg += "존재하지 않는 유저입니다."
+						} else if (json.status == 401) {
+							msg += "비밀번호가 잘못되었습니다"
+						alert(msg)
+						} else {
 							window.location.href = "/"
-						else {
-							let msg = ''
-							if (json.status == 400) {
-								msg += "존재하지 않는 유저입니다."
-							} else if (json.status == 401) {
-								msg += "비밀번호가 잘못되었습니다"
-							}
-							alert(msg)
 						}
+
 					}
 
 					)

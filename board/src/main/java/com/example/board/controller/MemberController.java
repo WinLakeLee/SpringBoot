@@ -1,14 +1,12 @@
 package com.example.board.controller;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +31,9 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
+	
+	@Value("${file.upload-dir}")
+	private String uploadDir;
 
 	@GetMapping("join")
 	public String join() {
@@ -41,18 +42,16 @@ public class MemberController {
 
 	@PostMapping("join")
 	@ResponseBody
-	public ResponseDTO<?> Register(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-//			HashMap<String, ?> errorMap = bindingResult.getAllErrors().stream().collect(Collectors.toMap(Errors::, null));
-			
-		}
-		User findUser = memberService.getUser(userDTO.getUserName());
-		if (findUser.getUserName() == null) {
-			memberService.joinUser(userDTO);
-			return new ResponseDTO<>(HttpStatus.ACCEPTED, userDTO.getUserName() + "님 회원가입 성공");
-		} else {
-			return new ResponseDTO<>(HttpStatus.BAD_REQUEST, userDTO.getUserName() + "님은 이미 가입한 회원입니다");
-		}
+	public ResponseDTO<?> Register(@Valid @RequestBody UserDTO userDTO) {
+//		if (bindingResult.hasErrors()) {
+//			Map<String, String> errorMap = bindingResult.getFieldErrors().stream()
+//					.collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+//			return new ResponseDTO<>(HttpStatus.BAD_REQUEST, errorMap);
+//		} else {
+		User joinUser = memberService.joinUser(userDTO);
+		return new ResponseDTO<>(HttpStatus.ACCEPTED, joinUser.getUserName() + "님 회원가입 성공");
+//		}
+
 	}
 
 	@PostMapping("join2")

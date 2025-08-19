@@ -12,14 +12,9 @@ const userObject = {
 				const join = async () => {
 					await fetch("/auth/join", {
 						method: "POST",
-						mode: "cors",
-						cache: "no-cache",
-						credentials: "same-origin",
 						headers: {
 							"Content-Type": "application/json; charset=UTF-8"
 						},
-						redirect: "follow",
-						referrerPolicy: "no-referrer",
 						body: JSON.stringify(data)
 					})
 						.then(res => res.json())
